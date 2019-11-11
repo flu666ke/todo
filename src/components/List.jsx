@@ -1,18 +1,29 @@
 import React from 'react'
 
-const List = ({ task, isCompleted, index, deleteTask }) => {
+class List extends React.Component {
 
-    return (
-        <div>
-            <span>{task}</span>
-            <input type="checkbox" checked={isCompleted} id={index}/>is completed? 
-            <button
-                onClick={deleteTask}
-                id={index}
-            >Remove Task</button>
-        </div>
-    )
+    render() {
+        const { task, index, deleteTask, completedTask, isComleted } = this.props
+        return (
+            <div>
+                <span>{task}</span>
+                <button
+                    onClick={completedTask}
+                    id={index}
+                >
+                    {isComleted ? 'done' : 'not'}
+                </button>
+                <button
+                    onClick={deleteTask}
+                    id={index}
+                >Remove Task</button>
+            </div>
+        )
+    }
+
 }
 
 export default List
+
+
 

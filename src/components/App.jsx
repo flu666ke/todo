@@ -48,10 +48,18 @@ class App extends React.Component {
     this.setState({
       tasks: tasksList
     })
-
     storage.setItem('tasks', JSON.stringify(tasksList))
-    console.log('what index?', index)
+  }
 
+  completedTask = (event) => {
+    let index = event.target.getAttribute('id')
+    const tasksList = JSON.parse(storage.getItem('tasks'))
+    const doneTask = tasksList[index]
+    doneTask.isComleted = !doneTask.isComleted
+    this.setState({
+      tasks: tasksList
+    })
+    storage.setItem('tasks', JSON.stringify(tasksList))
   }
 
   render() {
@@ -66,14 +74,15 @@ class App extends React.Component {
           <button>Add task</button>
         </form>
         <div>
-          {this.state.tasks ? this.state.tasks.map((task, index) =>
+          {this.state.tasks && this.state.tasks.map((task, index) =>
             <List
               key={index}
               task={task.taskText}
-              isComleted={task.isComleted}
               index={index}
+              isComleted={this.state.tasks[index].isComleted}
               deleteTask={this.deleteTask}
-            />) : ''}
+              completedTask={this.completedTask}
+            />)}
         </div>
       </div>
     );
