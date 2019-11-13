@@ -1,6 +1,30 @@
 import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import storage from '../helpers/storage';
 import List from './List';
+
+const style = ({
+  wrappper: {
+    backgroundColor: '#FFFFE0',
+    height: '100vh',
+    width: '800px',
+    margin: 'auto',
+    borderRadius: '5px',
+    boxShadow: '0px 0px 5px 2px black',
+  },
+  header: {
+    padding: '30px',
+    textAlign: 'center',
+  },
+  form: {
+    textAlign: 'center',
+  },
+  list: {
+    margin: '20px 0px 30px 120px'
+  },
+});
 
 class App extends React.Component {
 
@@ -16,7 +40,7 @@ class App extends React.Component {
   addTask = (event) => {
     event.preventDefault()
     let text = this.state.value
-
+    if (!text) return
     const itemObj = {
       taskText: text,
       isComleted: false
@@ -64,16 +88,25 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.addTask}>
-          <input
+      <div style={style.wrappper}>
+        <h1 style={style.header}>My Tasks</h1>
+        <form onSubmit={this.addTask} style={style.form} noValidate autoComplete="off">
+          <TextField
+            id="outlined-textarea"
             type='text'
+            label="Enter New Task"
+            multiline
+            margin="normal"
+            variant="outlined"
             value={this.state.value}
             onChange={this.handleChange}
+            name="name"
           />
-          <button>Add task</button>
+          <Button style={{ margin: '24px' }} type="submit" variant="contained" color="primary">
+            Add Task
+             </Button>
         </form>
-        <div>
+        <div style={style.list}>
           {this.state.tasks && this.state.tasks.map((task, index) =>
             <List
               key={index}
@@ -89,4 +122,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withStyles(style)(App);
