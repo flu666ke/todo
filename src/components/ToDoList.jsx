@@ -3,13 +3,32 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import List from "./List";
 import style from "../style";
-import { setTaskToStorage, getTaskFromStorage } from "../helpers/setTask";
+import { getTaskFromStorage, setTaskToStorage } from "../helpers/storage";
+import SortOptions from "./SortOptions";
 
 class ToDoList extends React.Component {
   state = {
     value: "",
-    tasks: getTaskFromStorage() || []
+    tasks: getTaskFromStorage() || [],
+    sortValue: '',
   };
+
+  handleSort = (value) => {
+    if (value === 'alphabeticaly') {
+      this.setState({
+        sortValue: value,
+        tasks: this.state.tasks.map(task => task.taskText + 'sort')
+     })
+      console.log(this.state)
+    }
+    else if (value === 'creation date') {
+      this.setState({
+        sortValue: value
+      })
+      console.log(this.state)
+    }
+  }
+
 
   handleChange = event => {
     this.setState({ value: event.target.value });
@@ -22,13 +41,14 @@ class ToDoList extends React.Component {
 
     const task = {
       taskText: this.state.value,
-      isCompleted: false
+      isCompleted: false,
+      date: new Date().toLocaleDateString()
     };
 
     this.setState({
       tasks: [...this.state.tasks, task],
       value: ""
-    });
+    }, () => setTaskToStorage(this.state.tasks));
   };
 
   deleteTask = event => {
@@ -53,6 +73,7 @@ class ToDoList extends React.Component {
   };
 
   render() {
+    console.log(this.state)
     return (
       <div style={style.wrapper}>
         <h1 style={style.header}>My Tasks</h1>
@@ -86,14 +107,19 @@ class ToDoList extends React.Component {
           {this.state.tasks.map((task, index) => (
             <List
               key={index}
-              task={task.taskText}
+              task={task.taskText} 
               index={index}
               isCompleted={this.state.tasks[index].isCompleted}
               deleteTask={this.deleteTask}
               completeTask={this.completeTask}
+              date={task.date}
             />
           ))}
         </div>
+        <SortOptions
+          handleSort={this.handleSort}
+          sortValue={this.state.sortValue}
+        />
       </div>
     );
   }

@@ -15,10 +15,11 @@ const style = {
   }
 };
 
-const List = ({ task, index, deleteTask, completeTask, isCompleted }) => {
+const List = ({ task, index, deleteTask, completeTask, isCompleted, date }) => {
   return (
     <div style={style.wrapper}>
       <span style={style.text}>{task}</span>
+      <time>{date}</time>
       <button style={style.button} onClick={completeTask} id={index}>
         {isCompleted ? "Done" : "Not done"}
       </button>
