@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import List from "./List";
 import style from "../style";
-import { getTaskFromStorage, setTaskToStorage } from "../helpers/storage";
+import { getTaskFromStorage, setTaskToStorage, uuid } from "../helpers/storage";
 import SortOptions from "./SortOptions";
 
 class ToDoList extends React.Component {
@@ -14,16 +14,20 @@ class ToDoList extends React.Component {
   };
 
   handleSort = (value) => {
+    this.setState({
+      sortValue: value
+    })
     if (value === 'alphabeticaly') {
+      const tasks = [...this.state.tasks]
       this.setState({
-        sortValue: value,
-        tasks: this.state.tasks.map(task => task.taskText + 'sort')
-     })
+        tasks: tasks.sort((a, b) => (a.taskText > b.taskText ? 1 : -1))
+      })
       console.log(this.state)
     }
     else if (value === 'creation date') {
+      const tasks = [...this.state.tasks]
       this.setState({
-        sortValue: value
+        tasks: tasks.sort((a, b) => (a.date < b.date ? 1 : -1))
       })
       console.log(this.state)
     }
@@ -40,6 +44,7 @@ class ToDoList extends React.Component {
     if (!this.state.value) return;
 
     const task = {
+      id: uuid(),
       taskText: this.state.value,
       isCompleted: false,
       date: new Date().toLocaleDateString()
@@ -51,19 +56,19 @@ class ToDoList extends React.Component {
     }, () => setTaskToStorage(this.state.tasks));
   };
 
-  deleteTask = event => {
+  deleteTask = id => {
     const tasks = this.state.tasks.filter(
-      (_, index) => index != event.target.id
+      task => id !== task.id
     );
 
     this.setState({ tasks: tasks });
     setTaskToStorage(tasks);
   };
 
-  completeTask = event => {
-    const tasks = this.state.tasks.map((task, index) => {
-      if (index == event.target.id) {
-        task.isCompleted = !task.isCompleted;
+  completeTask = id => {
+    const tasks = this.state.tasks.map(task => {
+      if (id === task.id) {
+     return {...task, isCompleted: !task.isCompleted };
       }
       return task;
     });
@@ -73,7 +78,7 @@ class ToDoList extends React.Component {
   };
 
   render() {
-    console.log(this.state)
+    console.log(uuid())
     return (
       <div style={style.wrapper}>
         <h1 style={style.header}>My Tasks</h1>
@@ -103,23 +108,26 @@ class ToDoList extends React.Component {
             Add Task
           </Button>
         </form>
-        <div style={style.list}>
-          {this.state.tasks.map((task, index) => (
-            <List
-              key={index}
-              task={task.taskText} 
-              index={index}
-              isCompleted={this.state.tasks[index].isCompleted}
-              deleteTask={this.deleteTask}
-              completeTask={this.completeTask}
-              date={task.date}
+        <div style={style.container}>
+          <div style={style.list}>
+            {this.state.tasks.map(task => (
+              <List
+                key={task.id}
+                task={task}
+                isCompleted={task.isCompleted}
+                deleteTask={this.deleteTask}
+                completeTask={this.completeTask}
+                date={task.date}
+              />
+            ))}
+          </div>
+          <div style={style.sort}>
+            <SortOptions
+              handleSort={this.handleSort}
+              sortValue={this.state.sortValue}
             />
-          ))}
+          </div>
         </div>
-        <SortOptions
-          handleSort={this.handleSort}
-          sortValue={this.state.sortValue}
-        />
       </div>
     );
   }

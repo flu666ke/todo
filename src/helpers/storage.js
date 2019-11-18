@@ -11,3 +11,5 @@ export const setTaskToStorage = (tasks) => {
 export const getTaskFromStorage = () => {
     return JSON.parse(storage.getItem('tasks'))
 }
+
+export const uuid = () => `ID${(+new Date()).toString(16)}`

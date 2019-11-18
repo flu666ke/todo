@@ -8,14 +8,11 @@ const SortOptions = ({ handleSort, sortValue }) => {
 
     return (
         <div>
-            <label>
-                sort options
-                <select value={sortValue} onChange={handleChange}>
-                <option value="sort options">sort options</option>
-                    <option value="creation date">creation date</option>
-                    <option value="alphabeticaly">alphabeticaly</option>
-                </select>
-            </label>
+            <select value={sortValue} onChange={handleChange}>
+                <option value="sort options">select sort</option>
+                <option value="creation date">creation date</option>
+                <option value="alphabeticaly">alphabeticaly</option>
+            </select>
         </div>
     )
 }

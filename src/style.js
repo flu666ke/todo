@@ -14,8 +14,15 @@ const style = {
     form: {
       textAlign: "center"
     },
+    container: {
+      display: 'flex',
+      justifyContent: 'space-around'
+    },
     list: {
-      margin: "20px 0px 30px 120px"
+      margin: "20px 0px 30px 80px"
+    },
+    sort: {
+      marginTop: '30px'
     }
   };
   
