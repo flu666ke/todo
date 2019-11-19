@@ -15,7 +15,7 @@ const style = {
   }
 };
 
-const List = ({ task, deleteTask, completeTask, isCompleted, date }) => {
+const List = ({ task, deleteTask, completeTask }) => {
 
   const handleComplete = id => () => {
     completeTask(id)
@@ -28,9 +28,9 @@ const List = ({ task, deleteTask, completeTask, isCompleted, date }) => {
   return (
     <div style={style.wrapper}>
       <span style={style.text}>{task.taskText}</span>
-      <time>{date}</time>
+      <time>{task.date}</time>
       <button style={style.button} onClick={handleComplete(task.id)}>
-        {isCompleted ? "Done" : "Not done"}
+        {task.isCompleted ? "Done" : "Not done"}
       </button>
       <button style={style.button} onClick={handleDelete(task.id)}>
         Delete

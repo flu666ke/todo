@@ -2,9 +2,9 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import List from "./List";
+import SortOptions from "./SortOptions";
 import style from "../style";
 import { getTaskFromStorage, setTaskToStorage, uuid } from "../helpers/storage";
-import SortOptions from "./SortOptions";
 
 class ToDoList extends React.Component {
   state = {
@@ -17,22 +17,21 @@ class ToDoList extends React.Component {
     this.setState({
       sortValue: value
     })
+
     if (value === 'alphabeticaly') {
       const tasks = [...this.state.tasks]
       this.setState({
         tasks: tasks.sort((a, b) => (a.taskText > b.taskText ? 1 : -1))
       })
-      console.log(this.state)
     }
+
     else if (value === 'creation date') {
       const tasks = [...this.state.tasks]
       this.setState({
         tasks: tasks.sort((a, b) => (a.date < b.date ? 1 : -1))
       })
-      console.log(this.state)
     }
   }
-
 
   handleChange = event => {
     this.setState({ value: event.target.value });
@@ -78,7 +77,6 @@ class ToDoList extends React.Component {
   };
 
   render() {
-    console.log(uuid())
     return (
       <div style={style.wrapper}>
         <h1 style={style.header}>My Tasks</h1>
@@ -114,10 +112,8 @@ class ToDoList extends React.Component {
               <List
                 key={task.id}
                 task={task}
-                isCompleted={task.isCompleted}
                 deleteTask={this.deleteTask}
                 completeTask={this.completeTask}
-                date={task.date}
               />
             ))}
           </div>
